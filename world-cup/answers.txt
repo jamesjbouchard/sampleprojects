@@ -1,0 +1,22 @@
+Times:
+
+10 simulations: 0m0.021s
+100 simulations: 0m0.021s
+1000 simulations: 0m0.027s
+10000 simulations: 0m0.098s
+100000 simulations: 0m0.667s
+1000000 simulations: 0m6.926s
+
+Questions:
+
+Which predictions, if any, proved incorrect as you increased the number of simulations?:
+None proved incorrect as such and my results were pretty even between belgium and brazil no matter the amount of sims.
+10: belgium
+100: brazil
+1000: belgium
+10000: brazil
+100000: tie belgium brazil 0.01% difference
+1000000: belgium
+Suppose you're charged a fee for each second of compute time your program uses.
+After how many simulations would you call the predictions "good enough"?:
+I would go for 1000, since there is no difference in time of execution between 10 and 100, but there is no difference in price between 100 and 1000 since you are charged by the second.
