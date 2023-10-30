@@ -27,6 +27,10 @@ def favicon():
     return '', 204  # 204 code means 'No Content'
 
 @app.after_request
+def add_security_headers(response):
+    response.headers['Content-Security-Policy'] = "default-src 'self' http://iontrade.back4app.io;"
+    return response
+    
 def after_request(response):
     """Ensure responses aren't cached"""
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
