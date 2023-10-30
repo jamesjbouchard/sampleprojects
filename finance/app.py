@@ -22,10 +22,6 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///finance.db")
 
-# Remove any route for favicon.ico
-@app.route("/favicon.ico")
-def favicon():
-    return "", 204
 
 @app.after_request
 def after_request(response):
