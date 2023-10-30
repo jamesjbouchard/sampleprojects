@@ -22,6 +22,9 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///finance.db")
 
+@app.route('/favicon.ico')
+def favicon():
+    return '', 204  # 204 code means 'No Content'
 
 @app.after_request
 def after_request(response):
