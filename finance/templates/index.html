@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Stock Quote
+{% endblock %}
+
+{% block main %}
+<center>
+    <table>
+        <tr>
+            <th>Symbol</th>
+            <th>Total Shares</th>
+            <th>Total Value</th>
+        </tr>
+        {% for row in folio %}
+            <tr>
+                <td>  {{ row.symbol }}  </td>
+                <td>  {{ row.total_shares }}  </td>
+                <td>  {{ row.formatted_total_value }}  </td> {# Use the formatted_total_value field #}
+            </tr>
+        {% endfor %}
+    </table><br>
+    <h6>Your cash balance is <b>{{ formatcash }}</b>USD</h6>
+    <h6>The value of your holdings is <b>{{ formatted_total_holdings }}</b>USD</h6>
+    <h6>Your combined total is <b>{{ formatted_total_balance }}</b>USD</h6><br>
+</center>
+{% endblock %}

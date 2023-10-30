@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Stock Quote
+{% endblock %}
+
+{% block main %}
+<center>
+    <table>
+        <tr>
+            <th>TRXID</th>
+            <th>Symbol</th>
+            <th>Total Shares</th>
+            <th>Total Value</th>
+            <th>Buy or Sell</th>
+            <th>Date</th>
+        </tr>
+        {% for row in history %}
+            <tr>
+                <td>  {{ row.trx_id }}  </td>
+                <td>  {{ row.symbol }}  </td>
+                <td>  {{ row.quantity }}  </td>
+                <td>  {{ row.formatted_value }}  </td> {# Use the formatted_value field #}
+                <td>  {{ row.buysell }}  </td>
+                <td>  {{ row.date }}  </td>
+            </tr>
+        {% endfor %}
+    </table><br>
+    <h4>The above is your up-to-date history of transactions</h4>
+</center>
+{% endblock %}
