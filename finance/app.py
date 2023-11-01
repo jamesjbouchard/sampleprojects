@@ -10,7 +10,7 @@ from helpers import apology, login_required, lookup, usd
 # Configure application
 app = Flask(__name__)
 # connect port 5000
-app.run(host='0.0.0.0', port=5000)
+# app.run(host='0.0.0.0', port=5000) was added to end of the file
 # Custom filter
 app.jinja_env.filters["usd"] = usd
 
@@ -275,6 +275,9 @@ def sell():
         return redirect("/")
     else:
         return render_template("sell.html", user_stocks=user_stocks)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
 
 
 
