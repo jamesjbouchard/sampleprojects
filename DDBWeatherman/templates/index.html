@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DDB Weatherman</title>
+    <!-- Set the viewport for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Link to an external CSS stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Internal CSS styles for the table and input field -->
+    <style>
+        /* Define styles for the table */
+        table {
+            width: 90%; /* Set the table width to 90% of the container */
+            margin: 0 auto; /* Center the table horizontally */
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2; /* Set background color for table headers */
+        }
+
+        /* Adjust the width of text input fields */
+        input[type="text"] {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>DDB Weatherman</h1>
+    <img src="static/DDB.jpg" height="100" width="105"><br>
+    <form method="POST">
+        <input type="text" name="city" id="cityInput" placeholder="Enter City" required>
+        <button type="submit">Get Weather</button>
+        <div id="suggestions" class="suggestions"></div>
+    </form>
+    <div class="weather-info">
+        <h2 id="city-name">Please enter a city name.</h2>
+        <img src="" id="weather-icon" alt="Weather Icon">
+        <p id="temperature"></p>
+        <p id="weather-description"></p>
+        <h3>5-Day Forecast:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date/Time</th>
+                    <th>Temperature (°C)</th>
+                    <th>Weather Description</th>
+                </tr>
+            </thead>
+            <tbody id="forecast-list"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // Function to get the URL of the weather icon
+        function getWeatherIconURL(iconCode) {
+            return `http://openweathermap.org/img/wn/${iconCode}.png`;
+        }
+
+        // Get references to HTML elements by their IDs
+        const cityInput = document.querySelector('#cityInput');
+        const suggestions = document.querySelector('#suggestions');
+
+        // Listen for input changes in the city input field
+        cityInput.addEventListener('input', () => {
+            const inputText = cityInput.value.trim().toLowerCase();
+            suggestions.innerHTML = '';
+
+            if (inputText.length === 0) {
+                return;
+            }
+        });
+
+        // Listen for form submission and fetch weather data
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const cityName = cityInput.value;
+            if (cityName) {
+                // Fetch current weather and forecast data
+                const weatherResponse = await fetch(`/get-weather?city=${cityName}`);
+                const forecastResponse = await fetch(`/get-forecast?city=${cityName}`);
+
+                if (weatherResponse.ok && forecastResponse.ok) {
+                    const weatherData = await weatherResponse.json();
+                    const forecastData = await forecastResponse.json();
+
+                    // Display weather data in HTML elements
+                    document.getElementById('city-name').textContent = `Weather in ${weatherData.name}, ${weatherData.sys.country}`;
+                    document.getElementById('temperature').textContent = `Temperature: ${weatherData.main.temp}°C`;
+                    document.getElementById('weather-description').textContent = `Weather: ${weatherData.weather[0].description}`;
+
+                    // Display the weather icon
+                    const weatherIcon = document.getElementById('weather-icon');
+                    weatherIcon.src = getWeatherIconURL(weatherData.weather[0].icon);
+
+                    // Display forecast data in HTML table
+                    const forecastTable = document.getElementById('forecast-list');
+                    forecastTable.innerHTML = ''; // Clear previous data
+
+                    for (const forecast of forecastData.list) {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${forecast.dt_txt}</td>
+                            <td>${forecast.main.temp}°C</td>
+                            <td>${forecast.weather[0].description}</td>
+                        `;
+                        forecastTable.appendChild(row);
+                    }
+                } else {
+                    document.getElementById('city-name').textContent = 'City not found. Please enter a valid city name.';
+                }
+                suggestions.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
